@@ -1,0 +1,1 @@
+web: cd django_score/ && waitress-serve --port=$PORT django_score.wsgi:application

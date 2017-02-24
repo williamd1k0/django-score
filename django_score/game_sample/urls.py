@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^new/', views.new_score_entry)
+    url(r'^new/', views.new_score_entry),
+    url(r'^list/', views.get_score_list)
 ]
 

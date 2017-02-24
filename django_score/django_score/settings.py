@@ -22,10 +22,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'ij8+d^#ioq*7eqz_1*s)5pq4%zdq*l%__j&3l&g9s7)jx6fr4w'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Token for game requests
+GAME_TOKEN = os.environ.get('GAME_TOKEN', 'debug-token')
 
-ALLOWED_HOSTS = ['.herokuapp.com']
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.environ.get('DJANGO_DEBUG', True)
+
+ALLOWED_HOSTS = ['*']
+if not DEBUG:
+    ALLOWED_HOSTS = ['.herokuapp.com']
 
 
 # Application definition

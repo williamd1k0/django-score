@@ -29,6 +29,6 @@ def get_score_list(request):
         {
             'name': score.name,
             'points': score.points
-        } for score in ScoreData.objects.all()
+        } for score in ScoreData.objects.order_by('-points')[:10]
     ]
     return JsonResponse({'score_list': score_list})

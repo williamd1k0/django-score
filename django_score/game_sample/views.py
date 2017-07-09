@@ -1,3 +1,5 @@
+import json
+
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 
@@ -9,10 +11,18 @@ from .models import ScoreData
 class HttpResponseUnauthorized(HttpResponse):
     status_code = 401
 
-defaut_request = lambda request: request.GET if settings.DEBUG else request.POST
+
+def get_score_data(body: bytes):
+    if body != b'':
+        try:
+            data = json.loads(body.decode('utf-8'))
+        except ValueError:
+            return None
+        return data if 'name' in data and 'points' in data else None
+    return None
 
 def is_token_valid(request):
-    return defaut_request(request).get('token', None) == settings.GAME_TOKEN
+    return request.META.get('HTTP_CLIENT_TOKEN', None) == settings.GAME_TOKEN
 
 # Wrapper for token validation
 def has_token(function):
@@ -28,9 +38,9 @@ def has_token(function):
 # Wrapper for score data validation
 def has_score_data(function):
     def wrap(request, *args, **kwargs):
-        req = defaut_request(request)
-        if not None in (req.get('name'), req.get('points')):
-            return function(request, req.get('name'), req.get('points'), *args, **kwargs)
+        data = get_score_data(request.body)
+        if data is not None:
+            return function(request, data, *args, **kwargs)
         else:
             print('NO SCORE DATA RECEIVED')
             return HttpResponseBadRequest()
@@ -44,9 +54,9 @@ def index(request):
 
 @has_token
 @has_score_data
-def new_score_entry(request, name, points):
-    print(name, points)
-    score = ScoreData(name=name, points=points)
+def new_score_entry(request, data):
+    print(data['name'], data['points'])
+    score = ScoreData(name=data['name'], points=data['points'])
     score.save()
     return HttpResponse('OK')
 

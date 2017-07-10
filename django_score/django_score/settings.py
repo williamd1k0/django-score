@@ -27,6 +27,10 @@ GAME_TOKEN = os.environ.get('GAME_TOKEN', 'debug-token')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', True)
+if DEBUG is not True:
+    DEBUG = True if DEBUG in ('True', 'true', 'yes', '1') else False
+
+print('DEBUG MODE:', DEBUG)
 
 ALLOWED_HOSTS = ['*']
 if not DEBUG:

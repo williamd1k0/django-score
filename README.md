@@ -1,6 +1,6 @@
 # Django Score
 
-![python-version](https://img.shields.io/badge/python-v3.4%2B-blue.svg?style=flat-square)
+![python-version](https://img.shields.io/badge/python-v3.5%2B-blue.svg?style=flat-square)
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)
 
 ## Before installation (optional)
